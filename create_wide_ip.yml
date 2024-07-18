@@ -1,0 +1,25 @@
+---
+- name: Create a Wide IP on BIG-IP
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Ensure Wide IP is present
+      f5networks.f5_bigip.gtm_wideip:
+        server: "{{ bigip_host }}"
+        user: "{{ bigip_user }}"
+        password: "{{ bigip_password }}"
+        validate_certs: no
+        state: present
+        name: "{{ wide_ip_name }}"
+        partition: "{{ partition }}"
+        description: "{{ wide_ip_description }}"
+        default_persistence: "{{ persistence_profile }}"
+        ltm_pools:
+          - "{{ ltm_pool_name }}"
+        dns_records:
+          - name: "{{ dns_record_name }}"
+            type: A
+            ttl: "{{ ttl }}"
+            answers:
+              - address: "{{ ip_address }}"
+
