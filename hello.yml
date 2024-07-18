@@ -1,10 +1,10 @@
 ---
 - hosts: hellogroup
   tasks:
-  - name: test
-    file:
-      path: /tmp/helloworld.txt
-      state: touch
-      owner: root
-      group: root
-      mode: 0644
+    - name: Create helloworld.txt with specific content
+      copy:
+        dest: /tmp/helloworld.txt
+        content: "hello I'm donggyu"
+        owner: root
+        group: root
+        mode: '0644'
