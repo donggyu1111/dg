@@ -1,2 +1,11 @@
-ddidwaawd
-
+hello.yml
+---
+- hosts: hellogroup
+  tasks:
+  - name: test
+    file:
+      path: /tmp/helloworld.txt
+      state: touch
+      owner: root
+      group: root
+      mode: 0644
