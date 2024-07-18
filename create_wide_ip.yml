@@ -11,7 +11,7 @@
         validate_certs: no
         state: present
         name: "{{ wide_ip_name }}"
-        partition: "{{ partition }}"
+        partition: "{{ partition }}"eeeeeeee
         description: "{{ wide_ip_description }}"
         default_persistence: "{{ persistence_profile }}"
         ltm_pools:
