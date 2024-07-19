@@ -7,16 +7,15 @@
       - { server: "121.78.62.82", user: "hdg7025", password: "^kdgksrk30%" }
       - { server: "118.221.123.42", user: "hdg7025", password: "^kdgksrk30%" }
       - { server: "139.150.254.194", user: "hdg7025", password: "^kdgksrk30%" }
-    wide_ip_name: "{{ wide_ip_name }}"
-    wide_ip_type: "{{ wide_ip_type }}"
-    pool_lb_method: round-robin
 
   tasks:
     - name: Set lb method on F5 BIG-IP
       bigip_gtm_wide_ip:
-        pool_lb_method: "{{ pool_lb_method }}"
-        name: "{{ wide_ip_name }}"
-        type: "{{ wide_ip_type }}"
+        pool_lb_mothod: round-robin
+        pools:
+          - name: raptor_dlt_all6_SSL
+        name: "{{ name }}"
+        type: "{{ type }}"
         provider:
           server: "{{ item.server }}"
           user: "{{ item.user }}"
