@@ -4,9 +4,9 @@
   gather_facts: no
   vars:
     f5_servers:
-      - { server: "121.78.62.82", user: "admin", password: "secret" }
-      - { server: "118.221.123.42", user: "admin", password: "secret" }
-      - { server: "139.150.254.194", user: "admin", password: "secret" }
+      - { server: "121.78.62.82", user: "hdg7025", password: "^kdgksrk30%" }
+      - { server: "118.221.123.42", user: "hdg7025", password: "^kdgksrk30%" }
+      - { server: "139.150.254.194", user: "hdg7025", password: "^kdgksrk30%" }
     wide_ip_name: "{{ wide_ip_name }}"
     wide_ip_type: "{{ wide_ip_type }}"
     pool_lb_method: round-robin
