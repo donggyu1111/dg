@@ -4,12 +4,12 @@
   gather_facts: no
   tasks:
     - name: Create Wide IP
-      f5networks.f5_modules.bigip_gtm_wide_ip:
+      bigip_gtm_wide_ip:
         name: "{{ wide_ip_name }}"
         type: "{{ wide_ip_type }}"
-        load_balancing_method: round-robin
+        pool_lb_mothod: round-robin
         pools:
-          - name: "{{ wide_ip_pool }}"
+          - name: raptor_dlt_all_6_SSL
         provider:
           server: "{{ f5_host }}"
           user: "{{ f5_user }}"
