@@ -5,15 +5,15 @@
   tasks:
     - name: Create Wide IP
       bigip_gtm_wide_ip:
-        name: "{{ wide_ip_name }}"
-        type: "{{ wide_ip_type }}"
+        name: "{{ name }}"
+        type: "{{ type }}"
         pool_lb_mothod: round-robin
         pools:
           - name: raptor_dlt_all_6_SSL
         provider:
-          server: "{{ f5_host }}"
-          user: "{{ f5_user }}"
-          password: "{{ f5_password }}"
+          server: "{{ 118.221.123.42 }}"
+          user: "{{ hdg7025 }}"
+          password: "{{ ^kdgksrk30% }}"
           validate_certs: no
         delegate_to: localhost
   
