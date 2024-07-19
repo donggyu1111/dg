@@ -13,7 +13,7 @@
       bigip_gtm_wide_ip:
         pool_lb_mothod: round-robin
         pools:
-          - name: raptor_dlt_all6_SSL
+          - name: raptor_dlt_all_6_SSL
         name: "{{ name }}"
         type: "{{ type }}"
         provider:
