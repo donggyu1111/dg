@@ -9,9 +9,9 @@
         type: "{{ type }}"
         pool_lb_mothod: round-robin
         pools:
-          - name: raptor_dlt_all_6_SSL
+          - name: "{{ pool }}"
         provider:
-          server: "{{ 118.221.123.42 }}"
+          server: "{{ 118.221.123.43 }}"
           user: "{{ hdg7025 }}"
           password: "{{ ^kdgksrk30% }}"
           validate_certs: no
