@@ -11,7 +11,7 @@
       bigip_gtm_wide_ip:
         name: "{{ name }}"
         type: "{{ type }}"
-        pool_lb_mothod: round-robin
+        pool_lb_method: round-robin
         pools:
           - name: "{{ pool }}"
         provider:
