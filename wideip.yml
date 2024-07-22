@@ -9,11 +9,11 @@
   tasks:
     - name: Create Wide IP
       bigip_gtm_wide_ip:
-        name: "{{ name }}"
-        type: "{{ type }}"
+        name: "{{ gtm_name }}"
+        type: "{{ gtm_type }}"
         pool_lb_method: round-robin
         pools:
-          - name: "{{ pool }}"
+          - name: "{{ gtm_pool }}"
         provider:
           server: "{{ f5_server }}"
           user: "{{ f5_user }}"
