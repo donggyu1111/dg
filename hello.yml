@@ -1,5 +1,7 @@
 ---
-- hosts: all
+- name: Create a file with specific content
+  hosts: all
+  become: no
   tasks:
     - name: Create helloworld.txt with specific content
       copy:
