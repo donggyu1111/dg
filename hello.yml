@@ -1,9 +1,9 @@
 ---
-- hosts: hellogroup
+- hosts: all
   tasks:
     - name: Create helloworld.txt with specific content
       copy:
-        dest: /tmp/helloworld.txt
+        dest: /home/hdg7025/test.txt
         content: "hello I'm donggyu"
         owner: root
         group: root
