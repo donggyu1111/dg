@@ -2,22 +2,20 @@
 - name: Configure Wide IP on F5 BIG-IP
   hosts: localhost
   gather_facts: no
-  vars:
-    f5_server: "118.221.123.43"
-    f5_user: "hdg7025"
-    f5_password: "^kdgksrk30%"
   tasks:
     - name: Create Wide IP
       bigip_gtm_wide_ip:
         name: "{{ gtm_name }}"
         type: "{{ gtm_type }}"
+        irules: ""
         pool_lb_method: round-robin
         pools:
           - name: "{{ gtm_pool }}"
+            ratio: 1
         provider:
-          server: "{{ f5_server }}"
-          user: "{{ f5_user }}"
-          password: "{{ f5_password }}"
+          server: "{{ 118.221.123.43 }}"
+          user: "{{ hdg7025 }}"
+          password: "{{ ^kdgksrk30% }}"
           validate_certs: no
         
   
