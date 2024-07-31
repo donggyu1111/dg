@@ -1,1 +1,18 @@
-d
+- name: Create Wide IP on BIG-IP GTM
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Create a Wide IP
+      f5networks.f5_modules.bigip_gtm_wide_ip:
+        provider:
+          server: "139.150.254.31"
+          user: "hdg7025"
+          password: "^kdgksrk30%"
+          validate_certs: false
+        name: "donggyu.test.kinxcdn.com"
+        type: "a"
+        partition: "Common"
+        pool_lb_method: "round-robin"
+        pools:
+          - name: "raptor_dlt_all"
+        state: "present"
