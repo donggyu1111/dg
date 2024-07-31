@@ -1,12 +1,17 @@
----
-- name: Create a file with specific content
-  hosts: all
-  become: no
+- name: Create Wide IP
+  hosts: localhost
+  gather_facts: no
   tasks:
-    - name: Create helloworld.txt with specific content
-      copy:
-        dest: /home/hdg7025/test.txt
-        content: "hello I'm donggyu"
-        owner: root
-        group: root
-        mode: '0644'
+    - name: Create a Wide IP on BIG-IP GTM
+      f5networks.f5_modules.bigip_gtm_wide_ip:
+        provider:
+          server: "139.150.254.31"
+          user: "hdg7025"
+          password: "^kdgksrk30%"
+          validate_certs: false
+        name: "donggyu.test.kinxcdn.com"
+        partition: "Common"
+        pool_lb_mode: "round-robin"
+        pools:
+          - name: "raptor_dlt_all"
+        state: "present"
