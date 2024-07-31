@@ -1,8 +1,8 @@
-- name: Create Wide IP
+- name: Create Wide IP on BIG-IP GTM
   hosts: localhost
   gather_facts: no
   tasks:
-    - name: Create a Wide IP on BIG-IP GTM
+    - name: Create a Wide IP
       f5networks.f5_modules.bigip_gtm_wide_ip:
         provider:
           server: "139.150.254.31"
