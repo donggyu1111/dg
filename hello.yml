@@ -10,8 +10,9 @@
           password: "^kdgksrk30%"
           validate_certs: false
         name: "donggyu.test.kinxcdn.com"
+        type: "a"
         partition: "Common"
-        pool_lb_mode: "round-robin"
+        pool_lb_method: "round-robin"
         pools:
           - name: "raptor_dlt_all"
         state: "present"
