@@ -14,7 +14,7 @@
           - name: "{{ gtm_pool }}"
             ratio: 1
         provider:
-          server: "{{ 118.221.123.43 }}"
+          server: "{{ 139.150.254.31 }}"
           user: "{{ hdg7025 }}"
           password: "{{ ^kdgksrk30% }}"
           validate_certs: no
