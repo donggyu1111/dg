@@ -9,7 +9,6 @@
       bigip_gtm_wide_ip:
         name: "{{ gtm_name }}"
         type: "{{ gtm_type }}"
-        irules: ""
         pool_lb_method: round-robin
         pools:
           - name: "{{ gtm_pool }}"
