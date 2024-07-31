@@ -3,7 +3,7 @@
   hosts: localhost
   gather_facts: no
   collections:
-    - f5networks.f5_modules
+    - f5networks.f5_modules.bigip_gtm_wide_ip
   tasks:
     - name: Create Wide IP
       bigip_gtm_wide_ip:
