@@ -3,7 +3,7 @@
   hosts: localhost
   gather_facts: no
   vars:
-    f5_server: "118.221.123.43"
+    f5_server: "139.150.254.31"
     f5_user: "hdg7025"
     f5_password: "^kdgksrk30%"
     gtm_name: donggyutest.kinx.com
