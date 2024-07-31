@@ -1,6 +1,7 @@
 ---
 - hosts: all
-  become: true
+  become: yes
+  become_method: sudo
   tasks:
    - name: shell command
      shell: "{{ command }}"
