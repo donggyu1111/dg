@@ -4,7 +4,7 @@
   tasks:
     - name: Create Pool
       f5networks.f5_modules.bigip_gtm_pool:
-        name: donggyutesttt
+        name: "{{ pool_name }}"
         type: a
         provider:
           user: hdg7025
