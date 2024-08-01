@@ -17,3 +17,4 @@
           password: "^kdgksrk30%"
           server: 139.150.254.31
           validate_certs: no
+        validate_certs: false
