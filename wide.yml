@@ -1,6 +1,8 @@
 - name: Create Wide IP on BIG-IP GTM
   hosts: localhost
   gather_facts: no
+  become: true
+  become_method: su
   tasks:
     - name: Create a Wide IP
       f5networks.f5_modules.bigip_gtm_wide_ip:
