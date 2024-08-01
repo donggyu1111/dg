@@ -25,12 +25,12 @@
 
     - name: Add GTM pool members
       bigip_gtm_pool_member:
-        pool: donggyutesttt
+        pool: "{{ pool_name }}"
         type: a
         aggregate: "{{ pool_members_fact }}"
         provider:
           server: "139.150.254.31"
           user: "hdg7025"
           password: "^kdgksrk30%"
+          validate_certs: false  
       delegate_to: localhost
-
