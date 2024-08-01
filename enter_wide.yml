@@ -14,5 +14,5 @@
         partition: "Common"
         pool_lb_method: "round-robin"
         pools:
-          - name: "raptor_dlt_all"
+          - name: "{{ gtm_pool }}"
         state: "present"
