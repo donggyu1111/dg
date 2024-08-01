@@ -1,0 +1,36 @@
+- name: Add GTM pool members dynamically
+  hosts: localhost
+  gather_facts: no
+  vars:
+    pool_members: "{{ pool_members | default('') }}"
+  tasks:
+    - name: Parse pool members input
+      set_fact:
+        members_list: "{{ pool_members.split(',') }}"
+
+    - name: Construct pool member entries
+      set_fact:
+        pool_members_fact: >-
+          {%- set member_entries = [] -%}
+          {%- for i in range(0, members_list | length, 2) -%}
+          {%- set _ = member_entries.append({
+                'server_name': members_list[i],
+                'virtual_server': members_list[i + 1],
+                'partition': 'Common',
+                'description': 'web server{}'.format(i // 2 + 1),
+                'member_order': i // 2
+              }) -%}
+          {%- endfor -%}
+          {{ member_entries }}
+
+    - name: Add GTM pool members
+      bigip_gtm_pool_member:
+        pool: donggyutesttt
+        type: a
+        aggregate: "{{ pool_members_fact }}"
+        provider:
+          server: "139.150.254.31"
+          user: "hdg7025"
+          password: "^kdgksrk30%"
+      delegate_to: localhost
+
