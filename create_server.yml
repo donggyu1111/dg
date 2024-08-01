@@ -1,8 +1,8 @@
-- name: Create server "GTM_Server"
+- name: Create GTM Server
   hosts: localhost
   gather_facts: no
   tasks:
-    - name: Create Server
+    - name: Create GTM Server
       f5networks.f5_modules.bigip_gtm_server:
         name: "{{ server_name }}"
         datacenter: /Common/"{{ datacenter }}"
@@ -17,4 +17,15 @@
           password: "^kdgksrk30%"
           server: 139.150.254.31
           validate_certs: no
-       
+
+    - name: Create Virtual Server
+      f5networks.f5_modules.bigip_gtm_virtual_server:
+        server_name: "{{ server_name }}"
+        address: "{{ server_ip }}"
+        name: "{{ server_name }}"
+        partition: Common
+        provider:
+          server: 139.150.254.31
+          user: hdg7025
+          password: "^kdgksrk30%"
+          validate_certs: no
