@@ -4,17 +4,17 @@
   tasks:
     - name: Create Server
       f5networks.f5_modules.bigip_gtm_server:
-        name: donggyutest
-        datacenter: /Common/KINX
-        server_type: sun-solaris
+        name: "{{ server_name }}"
+        datacenter: /Common/"{{ datacenter }}"
+        server_type: "{{ server_type }}"
         link_discovery: disabled
         virtual_server_discovery: disabled
         devices:
-          - name: managed1
-            address: 1.201.164.37
+          - name: "{{ server_name }}"
+            address: "{{ server_ip }}"
         provider:
           user: hdg7025
           password: "^kdgksrk30%"
           server: 139.150.254.31
           validate_certs: no
-        validate_certs: false
+       
