@@ -5,7 +5,7 @@
     - name: Create Pool
       f5networks.f5_modules.bigip_gtm_pool:
         name: "{{ pool_name }}"
-        type: a
+        type: "{{ pool_type }}"
         provider:
           user: hdg7025
           password: "^kdgksrk30%"
