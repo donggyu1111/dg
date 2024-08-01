@@ -1,29 +1,19 @@
 - name: Create server "GTM_Server"
-  bigip_gtm_server:
-    name: GTM_Server
-    datacenter: /Common/New York
-    server_type: bigip
-    link_discovery: disabled
-    virtual_server_discovery: disabled
-    devices:
-      - name: server_1
-        address: 1.1.1.1
-      - name: server_2
-        address: 2.2.2.1
-        translation: 192.168.2.1
-      - name: server_2
-        address: 2.2.2.2
-      - name: server_3
-        addresses:
-          - address: 3.3.3.1
-          - address: 3.3.3.2
-      - name: server_4
-        addresses:
-          - address: 4.4.4.1
-            translation: 192.168.14.1
-          - address: 4.4.4.2
-    provider:
-      user: admin
-      password: secret
-      server: lb.mydomain.com
-  delegate_to: localhost
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Create Server
+      f5networks.f5_modules.bigip_gtm_server:
+        name: donggyutest
+        datacenter: /Common/KINX
+        server_type: sun-solaris
+        link_discovery: disabled
+        virtual_server_discovery: disabled
+        devices:
+          - name: managed1
+            address: 1.201.164.37
+        provider:
+          user: hdg7025
+          password: "^kdgksrk30%"
+          server: 139.150.254.31
+          validate_certs: no
