@@ -9,8 +9,8 @@
           user: "hdg7025"
           password: "^kdgksrk30%"
           validate_certs: false
-        name: "donggyu.test.kinxcdn.com"
-        type: "a"
+        name: "{{ gtm_domain }}"
+        type: "{{ gtm_type }}"
         partition: "Common"
         pool_lb_method: "round-robin"
         pools:
