@@ -6,10 +6,10 @@
     - name: Fetch Wideiplist from F5
       f5networks.f5_modules.bigip_gtm_wideip:
         provider:
-          server: "your_f5_server"
-          user: "your_username"
-          password: "your_password"
-          validate_certs: false
+          user: hdg7025
+          password: "^kdgksrk30%"
+          server: 139.150.254.31
+          validate_certs: no
         name: "your_wideip_name"
         state: "present"
       register: wideip_result
