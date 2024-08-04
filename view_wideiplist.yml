@@ -1,19 +1,22 @@
 ---
-- name: Get F5 Wideiplist
+- name: Get all Wideiplist from F5
   hosts: localhost
   gather_facts: no
+  vars:
+    f5_server: "139.150.254.31"
+    f5_username: "hdg7025"
+    f5_password: "^kdgksrk30%"
   tasks:
     - name: Fetch Wideiplist from F5
-      f5networks.f5_modules.bigip_gtm_wideip:
-        provider:
-          user: hdg7025
-          password: "^kdgksrk30%"
-          server: 139.150.254.31
-          validate_certs: no
-        name: "your_wideip_name"
-        state: "present"
+      uri:
+        url: "https://{{ f5_server }}/mgmt/tm/gtm/wideip"
+        method: GET
+        user: "{{ f5_username }}"
+        password: "{{ f5_password }}"
+        force_basic_auth: yes
+        validate_certs: no
       register: wideip_result
 
     - name: Display Wideiplist
       debug:
-        var: wideip_result
+        var: wideip_result.json.items
