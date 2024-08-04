@@ -1,0 +1,19 @@
+---
+- name: Get F5 Wideiplist
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Fetch Wideiplist from F5
+      f5networks.f5_modules.bigip_gtm_wideip:
+        provider:
+          server: "your_f5_server"
+          user: "your_username"
+          password: "your_password"
+          validate_certs: false
+        name: "your_wideip_name"
+        state: "present"
+      register: wideip_result
+
+    - name: Display Wideiplist
+      debug:
+        var: wideip_result
