@@ -3,7 +3,8 @@
   hosts: localhost
   gather_facts: no
   vars:
-    search_term: "{{ search_query | default('') }}"  
+    search_query: "{{ search_query | default('') }}"  # 기본값 설정
+
   tasks:
     - name: Fetch Wide IP list
       uri:
@@ -19,8 +20,8 @@
         filtered_wideips: >
           {%- set result = [] -%}
           {%- for item in wideip_list.json.items -%}
-            {%- if search_term in item.name -%}
-              {%- set pools = item.pools | default([]) | map(attribute='name') | list -%}
+            {%- if search_query in item.name -%}
+              {%- set pools = item.pools | map(attribute='name') | list -%}
               {%- set pools_cname = item.poolsCname | default([]) | map(attribute='name') | list -%}
               {%- set _ = result.append({ 'Wide IP Name': item.name, 'Pools': pools, 'Pools CNAME': pools_cname }) -%}
             {%- endif -%}
