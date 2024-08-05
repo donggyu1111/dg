@@ -2,7 +2,7 @@
   hosts: localhost
   gather_facts: no
   vars:
-    search_query: "{{ search_query }}"
+    search_query: "{{ search_query }}"  
   tasks:
     - name: Fetch Wide IP list
       uri:
@@ -21,8 +21,8 @@
             {%- if search_query in item.name -%}
               {%- set pools = item.pools | default([]) -%}
               {%- set pools_cname = item.poolsCname | default([]) -%}
-              {%- set pool_names = pools | map(attribute='name') | default([]) -%}
-              {%- set cname_names = pools_cname | map(attribute='name') | default([]) -%}
+              {%- set pool_names = pools | selectattr('name', 'defined') | map(attribute='name') | list -%}
+              {%- set cname_names = pools_cname | selectattr('name', 'defined') | map(attribute='name') | list -%}
               {%- set _ = result.append({ 'Wide IP Name': item.name, 'Pools': pool_names, 'Pools CNAME': cname_names }) -%}
             {%- endif -%}
           {%- endfor -%}
