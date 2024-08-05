@@ -1,0 +1,12 @@
+- name: Filter Wide IP list based on search query
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Fetch Wide IP list
+      uri:
+        url: "https://139.150.254.31/mgmt/tm/gtm/wideip/a"
+        method: GET
+        user: "hdg7025"
+        password: "^kdgksrk30%"
+        validate_certs: no
+      register: wideip_list
