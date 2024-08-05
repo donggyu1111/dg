@@ -4,7 +4,7 @@
   hosts: localhost
   gather_facts: no
   tasks:
-    - name: Fetch GTM server list
+    - name: Fetch WideipList
       uri:
         url: "https://139.150.254.31/mgmt/tm/gtm/server"
         method: GET
