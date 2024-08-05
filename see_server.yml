@@ -1,6 +1,10 @@
 - name: Fetch and display GTM server list
+  collections:
+    - community.general
   hosts: localhost
   gather_facts: no
+  vars:
+    server_name: "{{ server_name }}"  # 설문조사에서 입력받을 변수 (AWX에서 설정)
   tasks:
     - name: Fetch GTM server list
       uri:
@@ -14,9 +18,11 @@
         validate_certs: no
       register: gtm_servers_response
 
-    - name: Extract server details using json_query
+    - name: Extract server details using json_query with filter
       set_fact:
-        server_details: "{{ gtm_servers_response.json | json_query('items[*].{name: name, addresses: addresses[*].name}') }}"
+        server_details: >-
+          {{ gtm_servers_response.json |
+             json_query("items[?contains(name, '" ~ server_name ~ "')].{name: name, addresses: addresses[*].name}") }}
 
     - name: Display server details
       debug:
