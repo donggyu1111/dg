@@ -1,0 +1,32 @@
+---
+- name: Fetch and filter Wide IP list
+  hosts: localhost
+  gather_facts: no
+  vars:
+    search_term: "{{ search_query | default('') }}"  
+  tasks:
+    - name: Fetch Wide IP list
+      uri:
+        url: "https://139.150.254.31/mgmt/tm/gtm/wideip/a"
+        method: GET
+        user: "hdg7025"
+        password: "^kdgksrk30%"
+        validate_certs: no
+      register: wideip_list
+
+    - name: Filter Wide IPs by search term
+      set_fact:
+        filtered_wideips: >
+          {%- set result = [] -%}
+          {%- for item in wideip_list.json.items -%}
+            {%- if search_term in item.name -%}
+              {%- set pools = item.pools | default([]) | map(attribute='name') | list -%}
+              {%- set pools_cname = item.poolsCname | default([]) | map(attribute='name') | list -%}
+              {%- set _ = result.append({ 'Wide IP Name': item.name, 'Pools': pools, 'Pools CNAME': pools_cname }) -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {{ result }}
+
+    - name: Display filtered Wide IPs
+      debug:
+        var: filtered_wideips
