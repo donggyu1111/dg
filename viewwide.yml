@@ -2,7 +2,7 @@
   hosts: localhost
   gather_facts: no
   vars:
-    search_query: "{{ query }}"  
+    search_query: "{{ search_query }}"  
   tasks:
     - name: Fetch Wide IP list
       uri:
