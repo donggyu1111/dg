@@ -2,7 +2,7 @@
   hosts: localhost
   gather_facts: no
   vars:
-    search_query: "{{ search_query }}"  
+    search_query: "{{ search_query }}"
   tasks:
     - name: Fetch Wide IP list
       uri:
@@ -19,9 +19,11 @@
           {%- set result = [] -%}
           {%- for item in wideip_list.json.items -%}
             {%- if search_query in item.name -%}
-              {%- set pools = item.pools | default([]) | map(attribute='name') | list -%}
-              {%- set pools_cname = item.poolsCname | default([]) | map(attribute='name') | list -%}
-              {%- set _ = result.append({ 'Wide IP Name': item.name, 'Pools': pools, 'Pools CNAME': pools_cname }) -%}
+              {%- set pools = item.pools | default([]) -%}
+              {%- set pools_cname = item.poolsCname | default([]) -%}
+              {%- set pool_names = pools | map(attribute='name') | default([]) -%}
+              {%- set cname_names = pools_cname | map(attribute='name') | default([]) -%}
+              {%- set _ = result.append({ 'Wide IP Name': item.name, 'Pools': pool_names, 'Pools CNAME': cname_names }) -%}
             {%- endif -%}
           {%- endfor -%}
           {{ result }}
