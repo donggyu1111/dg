@@ -1,4 +1,5 @@
-- name: Filter Wide IP list based on search query
+---
+- name: Fetch and display Wide IP list
   hosts: localhost
   gather_facts: no
   tasks:
@@ -10,3 +11,7 @@
         password: "^kdgksrk30%"
         validate_certs: no
       register: wideip_list
+
+    - name: Display the raw Wide IP list
+      debug:
+        var: wideip_list
