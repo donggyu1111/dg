@@ -1,0 +1,17 @@
+---
+- name: Fetch and display GTM server list
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Fetch GTM server list
+      uri:
+        url: "https://139.150.254.31/mgmt/tm/gtm/server"
+        method: GET
+        user: "hdg7025"
+        password: "^kdgksrk30%"
+        validate_certs: no
+      register: gtm_server_list
+
+    - name: Display the raw GTM server list
+      debug:
+        var: gtm_server_list
