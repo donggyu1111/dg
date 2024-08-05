@@ -15,10 +15,21 @@
         validate_certs: no
       register: wideip_list
 
+    - name: Verify the structure of wideip_list
+      debug:
+        var: wideip_list
+
     - name: Filter Wide IP list
       set_fact:
         filtered_wideip_list: "{{ wideip_list.json.items | selectattr('name', 'search', wideip_name) | list }}"
+      when: wideip_list.json.items is defined
+
+    - name: Alternative Filter Wide IP list using regex
+      set_fact:
+        filtered_wideip_list: "{{ wideip_list.json.items | selectattr('name', 'match', '.*' + wideip_name + '.*') | list }}"
+      when: wideip_list.json.items is defined and filtered_wideip_list is not defined
 
     - name: Display filtered Wide IP list
       debug:
         var: filtered_wideip_list
+      when: filtered_wideip_list is defined
