@@ -2,7 +2,7 @@
   hosts: localhost
   gather_facts: no
   vars:
-    server_name: " {{ server_name }} "  # 설문조사에서 입력받을 변수 (AWX에서 설정)
+    server_name: "{{ server_name }}"  # 설문조사에서 입력받을 변수 (AWX에서 설정)
   tasks:
     - name: Fetch GTM server list
       uri:
