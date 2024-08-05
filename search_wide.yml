@@ -17,4 +17,18 @@
 
     - name: Verify the structure of wideip_list
       debug:
-        var: wideip_list
+        var: wideip_list.json
+
+    - name: Ensure items is defined
+      set_fact:
+        wideip_items: "{{ wideip_list.json.items }}"
+
+    - name: Filter Wide IP list
+      set_fact:
+        filtered_wideip_list: "{{ wideip_items | selectattr('name', 'defined') | selectattr('name', 'search', wideip_name) | list }}"
+      when: wideip_items is defined
+
+    - name: Display filtered Wide IP list
+      debug:
+        var: filtered_wideip_list
+      when: filtered_wideip_list is defined
