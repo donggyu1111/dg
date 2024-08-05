@@ -1,5 +1,5 @@
 - name: Fetch and display GTM server list
-  colletions:
+  collections:
     - community.general
   hosts: localhost
   gather_facts: no
