@@ -1,4 +1,5 @@
 - name: Fetch and display GTM server list
+  collections: -
   hosts: localhost
   gather_facts: no
   vars:
