@@ -1,0 +1,27 @@
+- name: Filter and display servers based on survey input
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Fetch GTM server list
+      uri:
+        url: "https://139.150.254.31/mgmt/tm/gtm/server"
+        method: GET
+        return_content: yes
+        user: "hdg7025"               
+        password: "^kdgksrk30%"       
+        headers:
+          Accept: "application/json"  
+        validate_certs: no
+      register: gtm_servers_response
+
+    - name: Extract server details using json_query
+      set_fact:
+        server_details: "{{ gtm_servers_response.json.items | json_query('[*].{name: name, address: addresses[0].name}') }}"
+
+    - name: Filter servers based on survey input
+      set_fact:
+        filtered_servers: "{{ server_details | selectattr('name', 'search', server_query) | list + server_details | selectattr('address', 'search', server_query) | list | unique }}"
+
+    - name: Display filtered server details
+      debug:
+        msg: "{{ filtered_servers }}"
