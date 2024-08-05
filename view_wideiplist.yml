@@ -1,22 +1,17 @@
 ---
-- name: Get all Wideiplist from F5
+- name: Fetch and display Wide IP list
   hosts: localhost
   gather_facts: no
-  vars:
-    f5_server: "139.150.254.31"
-    f5_username: "hdg7025"
-    f5_password: "^kdgksrk30%"
   tasks:
-    - name: Fetch Wideiplist from F5
+    - name: Fetch Wide IP list
       uri:
-        url: "https://{{ f5_server }}/mgmt/tm/gtm/wideip"
+        url: "https://139.150.254.31/mgmt/tm/gtm/wideip/a"
         method: GET
-        user: "{{ f5_username }}"
-        password: "{{ f5_password }}"
-        force_basic_auth: yes
+        user: "hdg7025"
+        password: "^kdgksrk30%"
         validate_certs: no
-      register: wideip_result
+      register: wideip_list
 
-    - name: Display Wideiplist
+    - name: Display the raw Wide IP list
       debug:
-        var: wideip_result.json.items
+        var: wideip_list
