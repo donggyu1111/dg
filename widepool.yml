@@ -1,0 +1,17 @@
+---
+- name: Fetch and display Pool list
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Fetch Pool list
+      uri:
+        url: "https://139.150.254.31/mgmt/tm/gtm/pool/a"
+        method: GET
+        user: "hdg7025"
+        password: "^kdgksrk30%"
+        validate_certs: no
+      register: pool_list
+
+    - name: Display the raw Pool list
+      debug:
+        var: pool_list
