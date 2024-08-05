@@ -1,7 +1,7 @@
 - name: Ensure necessary collections and libraries are installed
   hosts: localhost
   gather_facts: no
-  pre_tasks:
+  tasks:
     - name: Install jmespath using pip
       ansible.builtin.pip:
         name: jmespath
@@ -23,6 +23,10 @@
           Accept: "application/json"  # 응답으로 JSON을 받기 위해 설정
         validate_certs: no
       register: gtm_servers_response
+
+    - name: Debug the response to check structure
+      debug:
+        msg: "{{ gtm_servers_response.json }}"
 
     - name: Extract server details using jmespath
       set_fact:
