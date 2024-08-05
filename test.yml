@@ -1,16 +1,6 @@
-- name: Ensure necessary collections and libraries are installed
-  hosts: localhost
-  gather_facts: no
-  tasks:
-    - name: Install jmespath using pip
-      ansible.builtin.pip:
-        name: jmespath
-
 - name: Fetch and display GTM server list
   hosts: localhost
   gather_facts: no
-  vars:
-    server_name: "{{ server_name }}"  # 설문조사에서 입력받을 변수 (AWX에서 설정)
   tasks:
     - name: Fetch GTM server list
       uri:
@@ -24,15 +14,11 @@
         validate_certs: no
       register: gtm_servers_response
 
-    - name: Debug the response to check structure
-      debug:
-        msg: "{{ gtm_servers_response.json }}"
-
-    - name: Extract server details using jmespath
+    - name: Extract server details using json_query with filter
       set_fact:
         server_details: >-
           {{ gtm_servers_response.json |
-             json_query("items[?contains(name, '" ~ server_name ~ "')].{name: name, addresses: addresses[*].name}") }}
+             json_query("items[?contains(name, 'donggyu')].{name: name, addresses: addresses[*].name}") }}
 
     - name: Display server details
       debug:
