@@ -1,0 +1,27 @@
+- name: Fetch and display GTM pool members
+  collections:
+    - community.general
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Fetch pool members information
+      uri:
+        url: "https://139.150.254.31/mgmt/tm/gtm/pool/a/~Common~donggyutesttt/members?ver=15.1.2.1"
+        method: GET
+        return_content: yes
+        user: "hdg7025"
+        password: "^kdgksrk30%"
+        headers:
+          Accept: "application/json"
+        validate_certs: no
+      register: pool_members_response
+
+    - name: Extract member names using json_query
+      set_fact:
+        member_names: >-
+          {{ pool_members_response.json |
+             json_query("items[*].name") }}
+
+    - name: Display member names
+      debug:
+        msg: "{{ member_names }}"
