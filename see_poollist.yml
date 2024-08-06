@@ -1,8 +1,10 @@
-- name: Fetch and display GTM pool list with members
+- name: Fetch and display specific GTM pool with members
   collections:
     - community.general
   hosts: localhost
   gather_facts: no
+  vars:
+    pool_name: "{{ pool_name }}"  # 설문조사에서 입력받을 변수 (AWX에서 설정)
   tasks:
     - name: Fetch GTM pool list
       uri:
@@ -16,17 +18,20 @@
         validate_certs: no
       register: gtm_pool_response
 
-    - name: Set fact for pool details
+    - name: Extract pool details containing pool_name using json_query
       set_fact:
-        pool_details: "{{ gtm_pool_response.json.items | map(attribute='name') | list }}"
+        selected_pool: >-
+          {{ gtm_pool_response.json.items |
+             json_query("[?name == '" ~ pool_name ~ "']") | first }}
 
-    - name: Initialize pool members list
-      set_fact:
-        pool_members: []
+    - name: Check if pool exists
+      fail:
+        msg: "No pool found with the name {{ pool_name }}"
+      when: selected_pool is not defined
 
-    - name: Fetch members for each pool
+    - name: Fetch members for the selected pool
       uri:
-        url: "{{ item.membersReference.link }}"
+        url: "{{ selected_pool.membersReference.link }}"
         method: GET
         return_content: yes
         user: "hdg7025"               # 사용자 ID
@@ -35,15 +40,13 @@
           Accept: "application/json"  # 응답으로 JSON을 받기 위해 설정
         validate_certs: no
       register: pool_members_response
-      loop: "{{ gtm_pool_response.json.items }}"
-      when: item.membersReference.link is defined
+      when: selected_pool.membersReference.link is defined
 
-    - name: Append members to pool members list
+    - name: Set fact for pool members
       set_fact:
-        pool_members: "{{ pool_members + [{'pool': item.name, 'members': pool_members_response.json.items | map(attribute='name') | list}] }}"
-      loop: "{{ gtm_pool_response.json.items }}"
-      when: item.membersReference.link is defined
+        pool_members: "{{ pool_members_response.json.items | map(attribute='name') | list }}"
+      when: selected_pool.membersReference.link is defined
 
     - name: Display pool details with members
       debug:
-        msg: "{{ pool_members }}"
+        msg: "Pool name: {{ selected_pool.name }}, Members: {{ pool_members }}"
