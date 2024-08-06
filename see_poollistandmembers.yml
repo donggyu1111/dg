@@ -47,6 +47,10 @@
         label: "{{ item.name }}"
       register: pool_members_response
 
+    - name: Display pool_members_response for debugging
+      debug:
+        var: pool_members_response
+
     - name: Combine pool names with their members
       set_fact:
         pools_with_members: >-
