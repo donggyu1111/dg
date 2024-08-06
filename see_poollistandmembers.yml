@@ -24,6 +24,14 @@
         filtered_pools: >-
           {{ gtm_pool_response.json.items | json_query("[?contains(name, '" ~ pool_name ~ "')].{name: name, members_link: membersReference.link}") }}
 
+    - name: Ensure filtered_pools is a list
+      set_fact:
+        filtered_pools: "{{ filtered_pools | default([]) | list }}"
+
+    - name: Display filtered pools for debugging
+      debug:
+        var: filtered_pools
+
     - name: Fetch members for each pool
       uri:
         url: "{{ item.members_link }}"
