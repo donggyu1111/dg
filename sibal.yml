@@ -16,7 +16,7 @@
         headers:
           Accept: "application/json"  # 응답으로 JSON을 받기 위해 설정
         validate_certs: no
-      register: gtm_pool_reponse
+      register: gtm_pool_response
 
     - name: Extract pool details using json_query with filter
       set_fact:
