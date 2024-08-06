@@ -6,7 +6,7 @@
   tasks:
     - name: Fetch WideipList
       uri:
-        url: "https://139.150.254.31/mgmt/tm/gtm/server"
+        url: "https://139.150.254.31/mgmt/tm/gtm/wideip/a"
         method: GET
         return_content: yes
         user: "hdg7025"               # 사용자 ID
@@ -14,13 +14,13 @@
         headers:
           Accept: "application/json"  # 응답으로 JSON을 받기 위해 설정
         validate_certs: no
-      register: gtm_servers_response
+      register: gtm_wideiplist_response
 
     - name: Extract server details using json_query with filter
       set_fact:
         server_details: >-
-          {{ gtm_servers_response.json |
-             json_query("items[?contains(name, 'donggyu')].{name: name, addresses: addresses[*].name}") }}
+          {{ gtm_wideiplist_response.json |
+             json_query("items[?contains(name, 'boutique')].{name: name, addresses: addresses[*].name}") }}
 
     - name: Display server details
       debug:
