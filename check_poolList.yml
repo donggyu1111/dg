@@ -1,0 +1,31 @@
+- name: Fetch and display GTM pool list with members
+  hosts: localhost
+  gather_facts: no
+  vars:
+    pool_name: " {{pool_name}} "  # 검색할 pool_name
+  tasks:
+    - name: Fetch GTM pool list
+      uri:
+        url: "https://139.150.254.31/mgmt/tm/gtm/pool/a"
+        method: GET
+        return_content: yes
+        user: "hdg7025"
+        password: "^kdgksrk30%"
+        headers:
+          Accept: "application/json"
+        validate_certs: no
+      register: gtm_pool_response
+
+    - name: Extract pool details using json_query with filter
+      set_fact:
+        filtered_pools: >-
+          {{
+            gtm_pool_response.json | json_query("items[?contains(name, '" ~ pool_name ~ "')].{name: name, members_link: membersReference.link}") }}
+
+    - name: Ensure filtered_pools is a list
+      set_fact:
+        filtered_pools: "{{ filtered_pools | default([]) | list }}"
+
+    - name: Display filtered pools
+      debug:
+        msg: "{{ filtered_pools }}"
