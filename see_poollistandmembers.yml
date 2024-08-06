@@ -2,6 +2,7 @@
   hosts: localhost
   gather_facts: no
   vars:
+    pool_name: "{{ pool_name }}"  # 설문조사에서 입력받을 변수 (AWX에서 설정)
     gtm_base_url: "https://139.150.254.31/mgmt/tm/gtm/pool/a"
     user: "hdg7025"
     password: "^kdgksrk30%"
@@ -18,9 +19,10 @@
         validate_certs: no
       register: gtm_pool_response
 
-    - name: Extract pool names containing 'xcache'
+    - name: Extract pool details using json_query with filter
       set_fact:
-        filtered_pools: "{{ gtm_pool_response.json.items | json_query('[?contains(name, `xcache`)].{name: name, members_link: membersReference.link}') }}"
+        filtered_pools: >-
+          {{ gtm_pool_response.json.items | json_query("[?contains(name, '" ~ pool_name ~ "')].{name: name, members_link: membersReference.link}") }}
 
     - name: Fetch members for each pool
       uri:
