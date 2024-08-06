@@ -4,8 +4,8 @@
   hosts: localhost
   gather_facts: no
   vars:
-    pool_name: "donggyu"
-    server_ip: "139.150.254.31"
+    pool_name: "{{ pool_name }}"  # 검색할 pool_name을 입력합니다
+
   tasks:
     - name: Fetch GTM pool list
       uri:
@@ -18,29 +18,63 @@
           Accept: "application/json"
         validate_certs: no
       register: gtm_pool_response
+      # GTM 풀 목록을 가져오는 API 호출. 응답은 gtm_pool_response 변수에 저장됩니다.
 
     - name: Extract pool details using json_query with filter
       set_fact:
         filtered_pools: >-
           {{
-            gtm_pool_response.json | json_query("items[?contains(name, '" ~ pool_name ~ "')].{name: name, members_link: membersReference.link}")
-          }}
+            gtm_pool_response.json | json_query("items[?contains(name, '" ~ pool_name ~ "')].{name: name, members_link: membersReference.link}") }}
+      # JSON 응답에서 pool_name을 포함하는 풀만 필터링하여 name과 members_link를 추출합니다.
+      # 필터링된 결과를 filtered_pools 변수에 저장합니다.
 
     - name: Ensure filtered_pools is a list
       set_fact:
         filtered_pools: "{{ filtered_pools | default([]) | list }}"
+      # filtered_pools가 리스트 형태로 변환되도록 보장합니다.
+      # 리스트가 아닌 경우 빈 리스트로 설정합니다.
 
-    - name: Initialize filtered_pools_with_links
+    - name: Replace localhost with server_ip in members_link
       set_fact:
-        filtered_pools_with_links: []
-
-    - name: Replace 'localhost' with server_ip in members_link
-      set_fact:
-        filtered_pools_with_links: "{{ filtered_pools_with_links + [{'name': item.name, 'members_link': (item.members_link | replace('localhost', server_ip))}] }}"
+        filtered_pools_with_links: >-
+          {{
+            filtered_pools | map('combine', {'members_link': (item.members_link | replace('localhost', '139.150.254.31'))}) | list
+          }}
       loop: "{{ filtered_pools }}"
-      loop_control:
-        label: "{{ item.name }}"
+      # 각 풀의 members_link에서 'localhost'를 '139.150.254.31'로 교체합니다.
+      # 교체된 결과를 filtered_pools_with_links 변수에 저장합니다.
 
-    - name: Debug filtered pools with updated links
+    - name: Display filtered pools with updated links
       debug:
         msg: "{{ filtered_pools_with_links }}"
+      # 교체된 links가 포함된 필터링된 풀 목록을 출력합니다.
+
+    - name: Fetch pool members for each filtered pool
+      uri:
+        url: "{{ item.members_link }}"  # 쿼리 파라미터 제거
+        method: GET
+        return_content: yes
+        user: "hdg7025"
+        password: "^kdgksrk30%"
+        headers:
+          Accept: "application/json"
+        validate_certs: no
+      loop: "{{ filtered_pools_with_links }}"
+      register: pool_members_responses
+      # 각 필터링된 풀의 members_link를 사용하여 해당 풀의 멤버 목록을 가져옵니다.
+      # 각 요청의 응답은 pool_members_responses 변수에 저장됩니다.
+
+    - name: Extract and display member names for each pool
+      set_fact:
+        pool_members: >-
+          {{
+            pool_members_responses.results | map(attribute='json') | 
+            map('json_query', "items[*].name") | list
+          }}
+      # 각 풀의 멤버 응답에서 멤버 이름만 추출하여 pool_members 변수에 저장합니다.
+      # JSON 쿼리를 사용하여 멤버 이름 리스트를 추출합니다.
+
+    - name: Display pool members
+      debug:
+        msg: "{{ pool_members }}"
+      # 추출된 멤버 이름 리스트를 출력하여 확인합니다.
