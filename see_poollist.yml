@@ -1,0 +1,49 @@
+- name: Fetch and display GTM pool list with members
+  collections:
+    - community.general
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Fetch GTM pool list
+      uri:
+        url: "https://139.150.254.31/mgmt/tm/gtm/pool/a"
+        method: GET
+        return_content: yes
+        user: "hdg7025"               # 사용자 ID
+        password: "^kdgksrk30%"       # 비밀번호
+        headers:
+          Accept: "application/json"  # 응답으로 JSON을 받기 위해 설정
+        validate_certs: no
+      register: gtm_pool_response
+
+    - name: Set fact for pool details
+      set_fact:
+        pool_details: "{{ gtm_pool_response.json.items | map(attribute='name') | list }}"
+
+    - name: Initialize pool members list
+      set_fact:
+        pool_members: []
+
+    - name: Fetch members for each pool
+      uri:
+        url: "{{ item.membersReference.link }}"
+        method: GET
+        return_content: yes
+        user: "hdg7025"               # 사용자 ID
+        password: "^kdgksrk30%"       # 비밀번호
+        headers:
+          Accept: "application/json"  # 응답으로 JSON을 받기 위해 설정
+        validate_certs: no
+      register: pool_members_response
+      loop: "{{ gtm_pool_response.json.items }}"
+      when: item.membersReference.link is defined
+
+    - name: Append members to pool members list
+      set_fact:
+        pool_members: "{{ pool_members + [{'pool': item.name, 'members': pool_members_response.json.items | map(attribute='name') | list}] }}"
+      loop: "{{ gtm_pool_response.json.items }}"
+      when: item.membersReference.link is defined
+
+    - name: Display pool details with members
+      debug:
+        msg: "{{ pool_members }}"
