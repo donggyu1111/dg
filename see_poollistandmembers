@@ -1,0 +1,51 @@
+- name: Fetch and display GTM pool list with members
+  hosts: localhost
+  gather_facts: no
+  vars:
+    gtm_base_url: "https://139.150.254.31/mgmt/tm/gtm/pool/a"
+    user: "hdg7025"
+    password: "^kdgksrk30%"
+  tasks:
+    - name: Fetch GTM pool list
+      uri:
+        url: "{{ gtm_base_url }}"
+        method: GET
+        return_content: yes
+        user: "{{ user }}"
+        password: "{{ password }}"
+        headers:
+          Accept: "application/json"
+        validate_certs: no
+      register: gtm_pool_response
+
+    - name: Extract pool names containing 'xcache'
+      set_fact:
+        filtered_pools: "{{ gtm_pool_response.json.items | json_query('[?contains(name, `xcache`)].{name: name, members_link: membersReference.link}') }}"
+
+    - name: Fetch members for each pool
+      uri:
+        url: "{{ item.members_link }}"
+        method: GET
+        return_content: yes
+        user: "{{ user }}"
+        password: "{{ password }}"
+        headers:
+          Accept: "application/json"
+        validate_certs: no
+      loop: "{{ filtered_pools }}"
+      loop_control:
+        label: "{{ item.name }}"
+      register: pool_members_response
+
+    - name: Combine pool names with their members
+      set_fact:
+        pools_with_members: >-
+          {{
+            dict(
+              (item.item.name, item.content.json.items) for item in pool_members_response.results
+            )
+          }}
+
+    - name: Display pools with members
+      debug:
+        msg: "{{ pools_with_members }}"
