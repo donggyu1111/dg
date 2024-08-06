@@ -1,52 +1,72 @@
-- name: Fetch and display specific GTM pool with members
+- name: Fetch and display GTM pool list with members
   collections:
     - community.general
   hosts: localhost
   gather_facts: no
   vars:
-    pool_name: "{{ pool_name }}"  # 설문조사에서 입력받을 변수 (AWX에서 설정)
+    pool_name: " {{pool_name}} "
+    server_ip: "139.150.254.31"
   tasks:
     - name: Fetch GTM pool list
       uri:
         url: "https://139.150.254.31/mgmt/tm/gtm/pool/a"
         method: GET
         return_content: yes
-        user: "hdg7025"               # 사용자 ID
-        password: "^kdgksrk30%"       # 비밀번호
+        user: "hdg7025"
+        password: "^kdgksrk30%"
         headers:
-          Accept: "application/json"  # 응답으로 JSON을 받기 위해 설정
+          Accept: "application/json"
         validate_certs: no
       register: gtm_pool_response
 
-    - name: Extract pool details containing pool_name using json_query
+    - name: Extract pool details using json_query with filter
       set_fact:
-        selected_pool: >-
-          {{ gtm_pool_response.json.items |
-             json_query("[?name == '" ~ pool_name ~ "']") | first }}
+        filtered_pools: >-
+          {{
+            gtm_pool_response.json | json_query("items[?contains(name, '" ~ pool_name ~ "')].{name: name, members_link: membersReference.link}")
+          }}
 
-    - name: Check if pool exists
-      fail:
-        msg: "No pool found with the name {{ pool_name }}"
-      when: selected_pool is not defined
+    - name: Ensure filtered_pools is a list
+      set_fact:
+        filtered_pools: "{{ filtered_pools | default([]) | list }}"
 
-    - name: Fetch members for the selected pool
+    - name: Initialize filtered_pools_with_links
+      set_fact:
+        filtered_pools_with_links: []
+
+    - name: Replace 'localhost' with server_ip in members_link
+      set_fact:
+        filtered_pools_with_links: "{{ filtered_pools_with_links + [{'name': item.name, 'members_link': (item.members_link | replace('localhost', server_ip))}] }}"
+      loop: "{{ filtered_pools }}"
+      loop_control:
+        label: "{{ item.name }}"
+
+    - name: Fetch pool members for each filtered pool
       uri:
-        url: "{{ selected_pool.membersReference.link }}"
+        url: "{{ item.members_link }}"  
         method: GET
         return_content: yes
-        user: "hdg7025"               # 사용자 ID
-        password: "^kdgksrk30%"       # 비밀번호
+        user: "hdg7025"
+        password: "^kdgksrk30%"
         headers:
-          Accept: "application/json"  # 응답으로 JSON을 받기 위해 설정
+          Accept: "application/json"
         validate_certs: no
-      register: pool_members_response
-      when: selected_pool.membersReference.link is defined
+      loop: "{{ filtered_pools_with_links }}"
+      register: pool_members_responses
 
-    - name: Set fact for pool members
+    - name: Extract pool members and associate them with pool names
       set_fact:
-        pool_members: "{{ pool_members_response.json.items | map(attribute='name') | list }}"
-      when: selected_pool.membersReference.link is defined
+        pools_with_members: >-
+          {{
+            dict(
+              filtered_pools_with_links | map(attribute='name') | list 
+              | zip(pool_members_responses.results | map(attribute='json') | map('json_query', "items[*].name") | list)
+            )
+          }}
 
-    - name: Display pool details with members
+    - name: Display pools with their members
       debug:
-        msg: "Pool name: {{ selected_pool.name }}, Members: {{ pool_members }}"
+        msg: >-
+          {% for pool, members in pools_with_members.items() %}
+            Pool {{ pool }} has members: {{ members | join(', ') }}
+          {% endfor %}
