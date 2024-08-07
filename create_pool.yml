@@ -6,6 +6,10 @@
       f5networks.f5_modules.bigip_gtm_pool:
         name: "{{ pool_name }}"
         type: "{{ pool_type }}"
+        monitors:
+          - /Common/ICMPI
+          - /Common/IIS_HTTP
+          - /Common/IIS_HTTPS
         provider:
           user: hdg7025
           password: "^kdgksrk30%"
