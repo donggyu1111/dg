@@ -1,8 +1,8 @@
-- name: Delete WideipList
+- name: Delete Wide IP on BIG-IP GTM
   hosts: localhost
   gather_facts: no
   tasks:
-    - name: Create a Wide IP
+    - name: Delete a Wide IP
       f5networks.f5_modules.bigip_gtm_wide_ip:
         provider:
           server: "139.150.254.31"
@@ -10,9 +10,5 @@
           password: "^kdgksrk30%"
           validate_certs: false
         name: "{{ gtm_domain }}"
-        type: "{{ gtm_type }}"
         partition: "Common"
-        pool_lb_method: "round-robin"
-        pools:
-          - name: "{{ gtm_pool }}"
-        state: absent
+        state: "absent"
