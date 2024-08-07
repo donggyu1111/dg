@@ -8,7 +8,8 @@
           server: "139.150.254.31"
           user: "hdg7025"
           password: "^kdgksrk30%"
-          validate_certs: false
+          validate_certs: no
         name: "{{ gtm_domain }}"
+        type: a
         partition: "Common"
         state: "absent"
