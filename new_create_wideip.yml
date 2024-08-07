@@ -2,18 +2,14 @@
   hosts: localhost
   gather_facts: no
   vars:
-    gtm_pools: |
-      [
-      {% if pool_1 is defined and pool_1 != "" %}
-        {"name": "{{ pool_1 }}"}
-      {% endif %}
-      {% if pool_2 is defined and pool_2 != "" %}
-        , {"name": "{{ pool_2 }}"}
-      {% endif %}
-      {% if pool_3 is defined and pool_3 != "" %}
-        , {"name": "{{ pool_3 }}"}
-      {% endif %}
-      ]
+    gtm_pools: >
+      {{
+        [
+          {"name": pool_1} if pool_1 is defined and pool_1 != "" else None,
+          {"name": pool_2} if pool_2 is defined and pool_2 != "" else None,
+          {"name": pool_3} if pool_3 is defined and pool_3 != "" else None
+        ] | select("not none") | list
+      }}
   tasks:
     - name: Create a Wide IP
       f5networks.f5_modules.bigip_gtm_wide_ip:
@@ -26,5 +22,5 @@
         type: a
         partition: "Common"
         pool_lb_method: "round-robin"
-        pools: "{{ gtm_pools | from_json }}"
+        pools: "{{ gtm_pools }}"
         state: "present"
