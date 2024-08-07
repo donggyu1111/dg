@@ -1,0 +1,31 @@
+- name: Modify GTM Server
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Modify GTM Server
+      f5networks.f5_modules.bigip_gtm_server:
+        name: "{{ server_name }}"
+        datacenter: /Common/"{{ datacenter }}"
+        server_type: "{{ server_type }}"
+        link_discovery: disabled
+        virtual_server_discovery: disabled
+        devices:
+          - name: "{{ server_name }}"
+            address: "{{ new_server_ip }}"  # 수정할 서버 IP
+        provider:
+          user: hdg7025
+          password: "^kdgksrk30%"
+          server: 139.150.254.31
+          validate_certs: no
+
+    - name: Modify Virtual Server
+      f5networks.f5_modules.bigip_gtm_virtual_server:
+        server_name: "{{ server_name }}"
+        address: "{{ new_server_ip }}"  # 수정할 서버 IP
+        name: "{{ server_name }}"
+        partition: Common
+        provider:
+          server: 139.150.254.31
+          user: hdg7025
+          password: "^kdgksrk30%"
+          validate_certs: no
