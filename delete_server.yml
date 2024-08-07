@@ -1,0 +1,25 @@
+- name: Delete GTM Server
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Delete GTM Server
+      f5networks.f5_modules.bigip_gtm_server:
+        name: "{{ server_name }}"
+        state: absent
+        provider:
+          user: hdg7025
+          password: "^kdgksrk30%"
+          server: 139.150.254.31
+          validate_certs: no
+
+    - name: Delete Virtual Server
+      f5networks.f5_modules.bigip_gtm_virtual_server:
+        server_name: "{{ server_name }}"
+        name: "{{ server_name }}"
+        state: absent
+        partition: Common
+        provider:
+          server: 139.150.254.31
+          user: hdg7025
+          password: "^kdgksrk30%"
+          validate_certs: no
