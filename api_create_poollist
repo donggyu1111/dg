@@ -1,0 +1,4 @@
+curl -sk -u hdg7025:^kdgksrk30% -H "Content-Type: application/json" -X POST "https://118.221.123.43/mgmt/tm/gtm/pool" -d '{
+  "name": "donggyuapi",
+  "partition": "Common"
+}'
