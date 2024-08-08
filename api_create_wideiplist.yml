@@ -1,0 +1,14 @@
+---
+- name: Create Wide IP on BIG-IP GTM using Shell Script
+  hosts: all
+  gather_facts: no
+  vars:
+    gtm_domain: "{{ gtm_domain }}"  # AWX 설문조사에서 입력받은 변수
+    gtm_type: "{{ gtm_type }}"      # AWX 설문조사에서 입력받은 변수
+    gtm_pool: "{{ gtm_pool }}"      # AWX 설문조사에서 입력받은 변수
+  tasks:
+    - name: Run create_wide_ip.sh script
+      shell: |
+        /api/create_wide_ip.sh "{{ gtm_domain }}" "{{ gtm_type }}" "{{ gtm_pool }}"
+      args:
+        executable: /bin/bash
