@@ -1,6 +1,6 @@
 ---
 - name: Execute existing shell script on remote server
-  hosts: localhost  
+  hosts: all  
   tasks:
     - name: Execute the shell script on remote server
       ansible.builtin.command:
