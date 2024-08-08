@@ -1,0 +1,15 @@
+---
+- name: Create GTM Server using Shell Script
+  hosts: localhost
+  gather_facts: no
+  vars:
+    datacenter: "{{ datacenter }}"  # AWX 설문조사에서 입력받은 변수
+    server_name: "{{ server_name }}"  # AWX 설문조사에서 입력받은 변수
+    server_ip: "{{ server_ip }}"  # AWX 설문조사에서 입력받은 변수
+    server_type: "{{ server_type }}"  # AWX 설문조사에서 입력받은 변수
+  tasks:
+    - name: Run create_gtm_server.sh script
+      shell: |
+        /root/api/create_gtm_server.sh "{{ datacenter }}" "{{ server_name }}" "{{ server_ip }}" "{{ server_type }}"
+      args:
+        executable: /bin/bash
