@@ -10,6 +10,6 @@
   tasks:
     - name: Run create_gtm_server.sh script
       shell: |
-        /root/api/create_gtm_server.sh "{{ datacenter }}" "{{ server_name }}" "{{ server_ip }}" "{{ server_type }}"
+        /api/create_gtm_server.sh "{{ datacenter }}" "{{ server_name }}" "{{ server_ip }}" "{{ server_type }}"
       args:
         executable: /bin/bash
