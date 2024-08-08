@@ -1,6 +1,6 @@
 ---
 - name: Create GTM Server using Shell Script
-  hosts: localhost
+  hosts: all
   gather_facts: no
   vars:
     datacenter: "{{ datacenter }}"  # AWX 설문조사에서 입력받은 변수
