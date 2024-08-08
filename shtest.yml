@@ -1,6 +1,6 @@
 ---
 - name: Execute test.sh Script
-  hosts: localhost
+  hosts: 1.201.166.25
   gather_facts: no
   tasks:
     - name: Run test.sh script
