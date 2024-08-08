@@ -1,0 +1,10 @@
+---
+- name: Execute test.sh Script
+  hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Run test.sh script
+      shell: |
+        /api/test.sh
+      args:
+        executable: /bin/bash
