@@ -8,6 +8,6 @@
   tasks:
     - name: Run create_wide_ip.sh script
       shell: |
-        /api/create_wide_ip.sh "{{ gtm_domain }}" "{{ gtm_type }}" "{{ gtm_pool }}"
+        /api/create_wide_ip.sh "{{ gtm_domain }}" "{{ gtm_pool }}"
       args:
         executable: /bin/bash
