@@ -1,13 +1,7 @@
 ---
-- name: Execute shell script on remote server
+- name: Execute existing shell script on remote server
   hosts: localhost  
   tasks:
-    - name: Copy shell script to remote server
-      ansible.builtin.copy:
-        src: /api/test.sh  # 로컬 시스템에서의 스크립트 경로를 입력하세요.
-        dest: /api/test.sh    # 원격 서버에 복사할 위치를 입력하세요.
-        mode: '0755'                   # 실행 권한을 설정합니다.
-
     - name: Execute the shell script on remote server
       ansible.builtin.command:
         cmd: /api/test.sh
